@@ -6,7 +6,7 @@ Gather all information about the software
 
 NAME = "libZimSciunto"
 URL = "https://github.com/sciunto/libZimSciunto"
-LICENSE = "GPLv3+"
+LICENSE = "LGPLv3+"
 EMAIL = "fboulogne@sciunto.org"
 VERSION = "0.1"
 
