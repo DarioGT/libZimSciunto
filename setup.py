@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-from ZimBibliographer import info
+from libzimsciunto import info
 
 setup(
     name         = 'libZimSciunto',
