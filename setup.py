@@ -10,5 +10,5 @@ setup(
     author       = "Francois Boulogne",
     author_email = info.EMAIL,
     description  = info.SHORT_DESCRIPTION,
-    packages = ['libZimSciunto'],
+    packages = ['libzimsciunto'],
 )
