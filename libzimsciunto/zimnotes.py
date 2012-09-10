@@ -27,7 +27,7 @@ import glob
 
 
 #our libs
-from ZimBibliographer import utils
+from libzimsciunto import utils
 #from ZimArchivist import archive
 #from ZimArchivist import editline
 #from ZimArchivist import processtext
