@@ -22,8 +22,8 @@ class TimeChecker():
 
     def __init__(self, timedb, zimroot):
         """
-        timedb : database file path 
-        zimroot : root of the zim notebook
+        :param timedb: database file path 
+        :param zimroot: root of the zim notebook
         """
         self.timedb = os.path.expanduser(timedb)
         self.zimroot = zimroot
@@ -32,7 +32,7 @@ class TimeChecker():
         """
         Put the current time in the database for the filename
     
-        filename : 
+        :param filename: 
         """
         database = shelve.open(self.timedb)
         try:
@@ -50,7 +50,7 @@ class TimeChecker():
         True: if we don't know
         False: The file is the same.
     
-        filename : 
+        :param filename: 
         """
         database = shelve.open(self.timedb)
         try:

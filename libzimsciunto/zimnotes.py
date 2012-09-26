@@ -35,7 +35,10 @@ from libzimsciunto import utils
 
 def get_zim_files(zim_root):
     """
-    get the list of txt zim files
+    Get the list of txt zim files
+
+    :param zim_root: filepath of the zim root directory
+    :returns: list
     """
     logging.info('Looking for zim files in ' + str(zim_root))
     zim_files = []
@@ -61,18 +64,18 @@ from queue import Queue
 class ThreadZimfiles(threading.Thread):
     """
     Process Zim files to create archives
+
+    :param lock: lock from Threading
+    :param timechecker: Instance of TimeChecker
+    :param zim_file_queue: Queue contraing zim files
+    :param zim_root: filepath of the zim notebook root
+    :param zim_archive_path: .Archive
+    :param process_text_method: Function processing the text
+    :param args: arguments for process_text_method
     """
     def __init__(self, lock, timechecker, zim_file_queue, zim_root, process_text_method, *args):
         """
         Constructor
-
-        lock : lock from Threading
-        timechecker : Instance of TimeChecker
-        zim_file_queue : Queue contraing zim files
-        zim_root : filepath of the zim notebook root
-        zim_archive_path : .Archive
-        process_text_method : Function processing the text
-        args : arguments for process_text_method
         """
         threading.Thread.__init__(self)
         self.lock = lock
@@ -84,9 +87,10 @@ class ThreadZimfiles(threading.Thread):
     
     def run(self):
         """ Job: 
-        Read the zim file
-        Look for links
-        Archive links when necessary
+
+        * Read the zim file
+        * Look for links
+        * Archive links when necessary
         """
         while True:
             zim_file = self.zim_file_queue.get()
@@ -114,13 +118,13 @@ def process_zim_file(timechecker, zim_root, zim_files, process_text_method, chec
     """
     Archive links in zim_files
     
-    timechecker : Instance of TimeChecker()
-    zim_root : filepath of the zim notebook root
-    zim_files : 
-    process_text_method : Function processing the text
-    checktime : Check last modification time prior processing
-    num_threads : number of threads
-    method_args : arguments for process_text_method
+    :param timechecker: Instance of TimeChecker()
+    :param zim_root: filepath of the zim notebook root
+    :param zim_files: 
+    :param process_text_method: Function processing the text
+    :param checktime: Check last modification time prior processing
+    :param num_threads: number of threads
+    :param method_args: arguments for process_text_method
     """
 
     file_queue = Queue()
