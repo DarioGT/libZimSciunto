@@ -1,6 +1,0 @@
-How to release
-==============
-
-* Update the file info.py
-* Update CHANGELOG
-* Create a tarball

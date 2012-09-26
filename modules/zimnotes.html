@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>zimnotes &mdash; libZimSciunto devel documentation</title>
+    
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="libZimSciunto devel documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">libZimSciunto devel documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for zimnotes</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="c">#This program is free software: you can redistribute it and/or modify</span>
+<span class="c">#it under the terms of the GNU General Public License as published by</span>
+<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#(at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c">#This program is distributed in the hope that it will be useful,</span>
+<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c">#You should have received a copy of the GNU General Public License</span>
+<span class="c">#along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions dealing with zim notebooks</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="c">#import uuid</span>
+
+
+
+<span class="c">#our libs</span>
+<span class="kn">from</span> <span class="nn">libzimsciunto</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="c">#from ZimArchivist import archive</span>
+<span class="c">#from ZimArchivist import editline</span>
+<span class="c">#from ZimArchivist import processtext</span>
+<span class="c">#from ZimBibliographer import timechecker</span>
+
+<div class="viewcode-block" id="get_zim_files"><a class="viewcode-back" href="../zimnotes.html#zimnotes.get_zim_files">[docs]</a><span class="k">def</span> <span class="nf">get_zim_files</span><span class="p">(</span><span class="n">zim_root</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the list of txt zim files</span>
+
+<span class="sd">    :param zim_root: filepath of the zim root directory</span>
+<span class="sd">    :returns: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Looking for zim files in &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">zim_root</span><span class="p">))</span>
+    <span class="n">zim_files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">zim_root</span><span class="p">):</span>
+        <span class="c">#Do not inspect .Archive</span>
+        <span class="k">if</span> <span class="s">&#39;.Archive&#39;</span> <span class="ow">in</span> <span class="n">dirnames</span><span class="p">:</span>
+            <span class="n">dirnames</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&quot;.Archive&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;look in &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&#39;*.txt&#39;</span><span class="p">)):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;file &#39;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+            
+            <span class="n">zim_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">zim_files</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;No zim file found!&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;List of zim files&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">zim_files</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">zim_files</span>
+
+</div>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+
+<div class="viewcode-block" id="ThreadZimfiles"><a class="viewcode-back" href="../zimnotes.html#zimnotes.ThreadZimfiles">[docs]</a><span class="k">class</span> <span class="nc">ThreadZimfiles</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Process Zim files to create archives</span>
+
+<span class="sd">    :param lock: lock from Threading</span>
+<span class="sd">    :param timechecker: Instance of TimeChecker</span>
+<span class="sd">    :param zim_file_queue: Queue contraing zim files</span>
+<span class="sd">    :param zim_root: filepath of the zim notebook root</span>
+<span class="sd">    :param zim_archive_path: .Archive</span>
+<span class="sd">    :param process_text_method: Function processing the text</span>
+<span class="sd">    :param args: arguments for process_text_method</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">timechecker</span><span class="p">,</span> <span class="n">zim_file_queue</span><span class="p">,</span> <span class="n">zim_root</span><span class="p">,</span> <span class="n">process_text_method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">lock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timechecker</span> <span class="o">=</span> <span class="n">timechecker</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zim_file_queue</span> <span class="o">=</span> <span class="n">zim_file_queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zim_root</span> <span class="o">=</span> <span class="n">zim_root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process_text_method</span> <span class="o">=</span> <span class="n">process_text_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+    
+<div class="viewcode-block" id="ThreadZimfiles.run"><a class="viewcode-back" href="../zimnotes.html#zimnotes.ThreadZimfiles.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Job: </span>
+
+<span class="sd">        * Read the zim file</span>
+<span class="sd">        * Look for links</span>
+<span class="sd">        * Archive links when necessary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">zim_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zim_file_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">zim_file</span><span class="p">)</span>
+            <span class="c">#read</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">zim_file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">thefile</span><span class="p">:</span>
+                <span class="n">original_text</span> <span class="o">=</span> <span class="n">thefile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            
+            <span class="c">#process</span>
+            <span class="n">new_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_text_method</span><span class="p">(</span><span class="n">original_text</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+            
+            <span class="c">#write</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">zim_file</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">thefile</span><span class="p">:</span>
+                <span class="n">thefile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_text</span><span class="p">)</span>
+
+            <span class="c">#Update time</span>
+            <span class="n">relativepath</span> <span class="o">=</span> <span class="n">zim_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zim_root</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">timechecker</span><span class="o">.</span><span class="n">set_time</span><span class="p">(</span><span class="n">relativepath</span><span class="p">)</span>
+
+            <span class="c">#Done</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">zim_file_queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+</div></div>
+<div class="viewcode-block" id="process_zim_file"><a class="viewcode-back" href="../zimnotes.html#zimnotes.process_zim_file">[docs]</a><span class="k">def</span> <span class="nf">process_zim_file</span><span class="p">(</span><span class="n">timechecker</span><span class="p">,</span> <span class="n">zim_root</span><span class="p">,</span> <span class="n">zim_files</span><span class="p">,</span> <span class="n">process_text_method</span><span class="p">,</span> <span class="n">checktime</span><span class="p">,</span> <span class="n">num_thread</span><span class="p">,</span> <span class="o">*</span><span class="n">method_args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Archive links in zim_files</span>
+<span class="sd">    </span>
+<span class="sd">    :param timechecker: Instance of TimeChecker()</span>
+<span class="sd">    :param zim_root: filepath of the zim notebook root</span>
+<span class="sd">    :param zim_files: </span>
+<span class="sd">    :param process_text_method: Function processing the text</span>
+<span class="sd">    :param checktime: Check last modification time prior processing</span>
+<span class="sd">    :param num_threads: number of threads</span>
+<span class="sd">    :param method_args: arguments for process_text_method</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file_queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+    <span class="c">#Set up threads</span>
+    <span class="k">for</span> <span class="n">thread</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_thread</span><span class="p">):</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">ThreadZimfiles</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span> <span class="n">timechecker</span><span class="p">,</span> <span class="n">file_queue</span><span class="p">,</span> <span class="n">zim_root</span><span class="p">,</span> <span class="n">process_text_method</span><span class="p">,</span> <span class="o">*</span><span class="n">method_args</span><span class="p">)</span>
+        <span class="n">worker</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">worker</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">thisfile</span> <span class="ow">in</span> <span class="n">zim_files</span><span class="p">:</span>
+        <span class="n">thisfile_relativepath</span> <span class="o">=</span> <span class="n">thisfile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">zim_root</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+            <span class="n">filestatus</span> <span class="o">=</span> <span class="n">timechecker</span><span class="o">.</span><span class="n">get_file_modif_status</span><span class="p">(</span><span class="n">thisfile_relativepath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filestatus</span> <span class="ow">and</span> <span class="n">checktime</span><span class="p">:</span>
+            <span class="c">#This zimfile has been updated, do it</span>
+            <span class="n">file_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">thisfile</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">checktime</span><span class="p">:</span> 
+            <span class="c">#We don&#39;t check time, do it</span>
+            <span class="n">file_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">thisfile</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c">#Nothing to do</span>
+            <span class="k">pass</span>
+
+    <span class="n">file_queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+
+
+<span class="c">#def process_zim_file_old(zim_file, zim_archive_path):</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#    Read the zim file</span>
+<span class="c">#    Look for links</span>
+<span class="c">#    Archive links when necessary</span>
+<span class="c">#    &quot;&quot;&quot;</span>
+<span class="c">#    #read</span>
+<span class="c">#    thefile = open(zim_file, &#39;r&#39;)</span>
+<span class="c">#    original_text = thefile.read()</span>
+<span class="c">#    thefile.close()</span>
+<span class="c">#    </span>
+<span class="c">#    #process</span>
+<span class="c">#    new_text = processtext.process_text(original_text, zim_archive_path)</span>
+<span class="c">#    </span>
+<span class="c">#    #write</span>
+<span class="c">#    #TODO compare original and old file</span>
+<span class="c">#    thefile = open(zim_file, &#39;w&#39;)</span>
+<span class="c">#    thefile.write(new_text)</span>
+<span class="c">#    thefile.close()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">libZimSciunto devel documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, F. Boulogne.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

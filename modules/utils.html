@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>utils &mdash; libZimSciunto devel documentation</title>
+    
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="libZimSciunto devel documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">libZimSciunto devel documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for utils</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="c">#This program is free software: you can redistribute it and/or modify</span>
+<span class="c">#it under the terms of the GNU General Public License as published by</span>
+<span class="c">#the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c">#(at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c">#This program is distributed in the hope that it will be useful,</span>
+<span class="c">#but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c">#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c">#GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c">#You should have received a copy of the GNU General Public License</span>
+<span class="c">#along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;</span>
+
+
+<span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">A couple of useful functions...</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="protect"><a class="viewcode-back" href="../utils.html#utils.protect">[docs]</a><span class="k">def</span> <span class="nf">protect</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Protect Metacaracters in a string&quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;\&amp;&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">\&amp;&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;\[&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">\[&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;\]&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">\]&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;\|&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">\|&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;\?&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">\?&#39;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+</div>
+<div class="viewcode-block" id="get_unexpanded_path"><a class="viewcode-back" href="../utils.html#utils.get_unexpanded_path">[docs]</a><span class="k">def</span> <span class="nf">get_unexpanded_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    if start by /home/foo,</span>
+<span class="sd">    convert /home/foo by ~ in a path</span>
+
+<span class="sd">    &gt;&gt;&gt; get_unexpanded_path(&#39;/home/gnu/dir&#39;) </span>
+<span class="sd">    &#39;~/dir&#39;</span>
+<span class="sd">    &gt;&gt;&gt; get_unexpanded_path(&#39;/tmp/foo&#39;)</span>
+<span class="sd">    &#39;/tmp/foo&#39;</span>
+<span class="sd">    &gt;&gt;&gt; get_unexpanded_path(&#39;/home/fr/foo/home/bar&#39;)</span>
+<span class="sd">    &#39;~/foo/home/bar&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;^/home/[a-zA-Z0-9]*/&#39;</span><span class="p">,</span> <span class="s">&#39;~/&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">path</span>
+</div>
+<div class="viewcode-block" id="create_pidfile"><a class="viewcode-back" href="../utils.html#utils.create_pidfile">[docs]</a><span class="k">def</span> <span class="nf">create_pidfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">F_OK</span><span class="p">):</span>
+            <span class="c">#Oh oh, there is a lock file</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pidfile</span><span class="p">:</span>
+                <span class="n">pidfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">old_pd</span> <span class="o">=</span> <span class="n">pidfile</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="c">#PID is running?</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">&quot;/proc/</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">old_pd</span><span class="p">):</span>
+                    <span class="c">#Yes</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">&#39;An instance is already running, exiting&#39;</span><span class="p">)</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                    <span class="c">#No</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pidfile</span><span class="p">:</span>
+        <span class="n">pidfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+</div>
+<div class="viewcode-block" id="release_pidfile"><a class="viewcode-back" href="../utils.html#utils.release_pidfile">[docs]</a><span class="k">def</span> <span class="nf">release_pidfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    
+</div>
+<span class="k">def</span> <span class="nf">_test</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+    
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">_test</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">libZimSciunto devel documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, F. Boulogne.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
