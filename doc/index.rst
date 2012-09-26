@@ -9,11 +9,12 @@ Welcome to libZimSciunto's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
+    
+    zimnotes
+    utils
+    timechecker
 
-
-
-Indices and tables
 ==================
 
 * :ref:`genindex`
