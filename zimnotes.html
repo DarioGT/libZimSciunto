@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Zimnotes &mdash; libZimSciunto devel documentation</title>
+    <title>Zimnotes &mdash; libZimSciunto  documentation</title>
     
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     'devel',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="libZimSciunto devel documentation" href="index.html" />
+    <link rel="top" title="libZimSciunto  documentation" href="index.html" />
     <link rel="next" title="Utils" href="utils.html" />
     <link rel="prev" title="Welcome to libZimSciunto’s documentation!" href="index.html" /> 
   </head>
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to libZimSciunto’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">libZimSciunto devel documentation</a> &raquo;</li> 
+        <li><a href="index.html">libZimSciunto  documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,9 +54,9 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="zimnotes">
-<h1>Zimnotes<a class="headerlink" href="#zimnotes" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-zimnotes"></span><p>Functions dealing with zim notebooks</p>
+  <div class="section" id="module-zimnotes">
+<span id="zimnotes"></span><h1>Zimnotes<a class="headerlink" href="#module-zimnotes" title="Permalink to this headline">¶</a></h1>
+<p>Functions dealing with zim notebooks</p>
 <dl class="class">
 <dt id="zimnotes.ThreadZimfiles">
 <em class="property">class </em><tt class="descclassname">zimnotes.</tt><tt class="descname">ThreadZimfiles</tt><big>(</big><em>lock</em>, <em>timechecker</em>, <em>zim_file_queue</em>, <em>zim_root</em>, <em>process_text_method</em>, <em>*args</em><big>)</big><a class="reference internal" href="modules/zimnotes.html#ThreadZimfiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zimnotes.ThreadZimfiles" title="Permalink to this definition">¶</a></dt>
@@ -79,46 +79,11 @@
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
-<dt id="zimnotes.ThreadZimfiles.daemon">
-<tt class="descname">daemon</tt><a class="headerlink" href="#zimnotes.ThreadZimfiles.daemon" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.getName">
-<tt class="descname">getName</tt><big>(</big><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.getName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="zimnotes.ThreadZimfiles.ident">
-<tt class="descname">ident</tt><a class="headerlink" href="#zimnotes.ThreadZimfiles.ident" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.isAlive">
-<tt class="descname">isAlive</tt><big>(</big><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.isAlive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.isDaemon">
-<tt class="descname">isDaemon</tt><big>(</big><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.isDaemon" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.is_alive">
-<tt class="descname">is_alive</tt><big>(</big><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.is_alive" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.join">
-<tt class="descname">join</tt><big>(</big><em>timeout=None</em><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.join" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="zimnotes.ThreadZimfiles.name">
-<tt class="descname">name</tt><a class="headerlink" href="#zimnotes.ThreadZimfiles.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>Note: The method &#8216;process_text_method&#8217; should return a tuple (bool, string).
+The boolean (if True) is used to avoid a modification of the time database
+by timechecker. This is useful when some modifications could not be done
+now but that have a chance to suceed later.
+The string contains the modified text.</p>
 <dl class="method">
 <dt id="zimnotes.ThreadZimfiles.run">
 <tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="modules/zimnotes.html#ThreadZimfiles.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#zimnotes.ThreadZimfiles.run" title="Permalink to this definition">¶</a></dt>
@@ -129,21 +94,6 @@
 <li>Archive links when necessary</li>
 </ul>
 </dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.setDaemon">
-<tt class="descname">setDaemon</tt><big>(</big><em>daemonic</em><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.setDaemon" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.setName">
-<tt class="descname">setName</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.setName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="zimnotes.ThreadZimfiles.start">
-<tt class="descname">start</tt><big>(</big><big>)</big><a class="headerlink" href="#zimnotes.ThreadZimfiles.start" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -237,7 +187,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to libZimSciunto’s documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">libZimSciunto devel documentation</a> &raquo;</li> 
+        <li><a href="index.html">libZimSciunto  documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

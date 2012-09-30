@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>zimnotes &mdash; libZimSciunto devel documentation</title>
+    <title>zimnotes &mdash; libZimSciunto  documentation</title>
     
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     'devel',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="libZimSciunto devel documentation" href="../index.html" />
+    <link rel="top" title="libZimSciunto  documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">libZimSciunto devel documentation</a> &raquo;</li>
+        <li><a href="../index.html">libZimSciunto  documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -73,16 +73,11 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">glob</span>
-<span class="c">#import uuid</span>
 
 
 
 <span class="c">#our libs</span>
 <span class="kn">from</span> <span class="nn">libzimsciunto</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="c">#from ZimArchivist import archive</span>
-<span class="c">#from ZimArchivist import editline</span>
-<span class="c">#from ZimArchivist import processtext</span>
-<span class="c">#from ZimBibliographer import timechecker</span>
 
 <div class="viewcode-block" id="get_zim_files"><a class="viewcode-back" href="../zimnotes.html#zimnotes.get_zim_files">[docs]</a><span class="k">def</span> <span class="nf">get_zim_files</span><span class="p">(</span><span class="n">zim_root</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -123,6 +118,13 @@
 <span class="sd">    :param zim_archive_path: .Archive</span>
 <span class="sd">    :param process_text_method: Function processing the text</span>
 <span class="sd">    :param args: arguments for process_text_method</span>
+
+
+<span class="sd">    Note: The method &#39;process_text_method&#39; should return a tuple (bool, string).</span>
+<span class="sd">    The boolean (if True) is used to avoid a modification of the time database</span>
+<span class="sd">    by timechecker. This is useful when some modifications could not be done</span>
+<span class="sd">    now but that have a chance to suceed later.</span>
+<span class="sd">    The string contains the modified text.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">timechecker</span><span class="p">,</span> <span class="n">zim_file_queue</span><span class="p">,</span> <span class="n">zim_root</span><span class="p">,</span> <span class="n">process_text_method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -151,16 +153,20 @@
                 <span class="n">original_text</span> <span class="o">=</span> <span class="n">thefile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             
             <span class="c">#process</span>
-            <span class="n">new_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_text_method</span><span class="p">(</span><span class="n">original_text</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">new_text</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_text_method</span><span class="p">(</span><span class="n">original_text</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
             
             <span class="c">#write</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">zim_file</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">thefile</span><span class="p">:</span>
                 <span class="n">thefile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_text</span><span class="p">)</span>
 
             <span class="c">#Update time</span>
-            <span class="n">relativepath</span> <span class="o">=</span> <span class="n">zim_file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">zim_root</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">timechecker</span><span class="o">.</span><span class="n">set_time</span><span class="p">(</span><span class="n">relativepath</span><span class="p">)</span>
+            <span class="c">#In case of error, we don&#39;t set the current time.</span>
+            <span class="c">#Maybe the user missed something, and the script should not</span>
+            <span class="c">#skip the file next time to try again.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">error</span><span class="p">:</span>
+                <span class="n">relativepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">zim_file</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">zim_root</span><span class="p">)</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">timechecker</span><span class="o">.</span><span class="n">set_time</span><span class="p">(</span><span class="n">relativepath</span><span class="p">)</span>
 
             <span class="c">#Done</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">zim_file_queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
@@ -187,7 +193,7 @@
         <span class="n">worker</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">thisfile</span> <span class="ow">in</span> <span class="n">zim_files</span><span class="p">:</span>
-        <span class="n">thisfile_relativepath</span> <span class="o">=</span> <span class="n">thisfile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">zim_root</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">thisfile_relativepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">thisfile</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">zim_root</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
             <span class="n">filestatus</span> <span class="o">=</span> <span class="n">timechecker</span><span class="o">.</span><span class="n">get_file_modif_status</span><span class="p">(</span><span class="n">thisfile_relativepath</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">filestatus</span> <span class="ow">and</span> <span class="n">checktime</span><span class="p">:</span>
@@ -204,28 +210,6 @@
 </div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="k">pass</span>
-
-
-
-<span class="c">#def process_zim_file_old(zim_file, zim_archive_path):</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#    Read the zim file</span>
-<span class="c">#    Look for links</span>
-<span class="c">#    Archive links when necessary</span>
-<span class="c">#    &quot;&quot;&quot;</span>
-<span class="c">#    #read</span>
-<span class="c">#    thefile = open(zim_file, &#39;r&#39;)</span>
-<span class="c">#    original_text = thefile.read()</span>
-<span class="c">#    thefile.close()</span>
-<span class="c">#    </span>
-<span class="c">#    #process</span>
-<span class="c">#    new_text = processtext.process_text(original_text, zim_archive_path)</span>
-<span class="c">#    </span>
-<span class="c">#    #write</span>
-<span class="c">#    #TODO compare original and old file</span>
-<span class="c">#    thefile = open(zim_file, &#39;w&#39;)</span>
-<span class="c">#    thefile.write(new_text)</span>
-<span class="c">#    thefile.close()</span>
 </pre></div>
 
           </div>
@@ -259,7 +243,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">libZimSciunto devel documentation</a> &raquo;</li>
+        <li><a href="../index.html">libZimSciunto  documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

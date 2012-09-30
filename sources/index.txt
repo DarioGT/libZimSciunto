@@ -6,6 +6,14 @@
 Welcome to libZimSciunto's documentation!
 =========================================
 
+:Author: François Boulogne
+:Source code: `github.com project <https://github.com/sciunto/libZimSciunto>`_
+:Generated: |today|
+:License: GPL v3
+:Version: |release|
+
+This is a library for my zim tools. `Zim <http://zim-wiki.org>`_ is a desktop wiki.
+
 Contents:
 
 .. toctree::

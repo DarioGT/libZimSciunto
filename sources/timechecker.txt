@@ -1,5 +1,5 @@
 Timechecker
-=====
+===========
 
 .. automodule:: timechecker
     :members:
