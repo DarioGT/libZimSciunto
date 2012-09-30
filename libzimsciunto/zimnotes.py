@@ -154,25 +154,3 @@ def process_zim_file(timechecker, zim_root, zim_files, process_text_method, chec
 if __name__ == '__main__':
     pass
 
-
-
-#def process_zim_file_old(zim_file, zim_archive_path):
-#    """
-#    Read the zim file
-#    Look for links
-#    Archive links when necessary
-#    """
-#    #read
-#    thefile = open(zim_file, 'r')
-#    original_text = thefile.read()
-#    thefile.close()
-#    
-#    #process
-#    new_text = processtext.process_text(original_text, zim_archive_path)
-#    
-#    #write
-#    #TODO compare original and old file
-#    thefile = open(zim_file, 'w')
-#    thefile.write(new_text)
-#    thefile.close()
-
