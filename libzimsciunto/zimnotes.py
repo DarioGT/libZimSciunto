@@ -22,16 +22,11 @@ import re
 import os
 import shutil
 import glob
-#import uuid
 
 
 
 #our libs
 from libzimsciunto import utils
-#from ZimArchivist import archive
-#from ZimArchivist import editline
-#from ZimArchivist import processtext
-#from ZimBibliographer import timechecker
 
 def get_zim_files(zim_root):
     """
@@ -72,6 +67,13 @@ class ThreadZimfiles(threading.Thread):
     :param zim_archive_path: .Archive
     :param process_text_method: Function processing the text
     :param args: arguments for process_text_method
+
+
+    Note: The method 'process_text_method' should return a tuple (bool, string).
+    The boolean (if True) is used to avoid a modification of the time database
+    by timechecker. This is useful when some modifications could not be done
+    now but that have a chance to suceed later.
+    The string contains the modified text.
     """
     def __init__(self, lock, timechecker, zim_file_queue, zim_root, process_text_method, *args):
         """
@@ -100,16 +102,20 @@ class ThreadZimfiles(threading.Thread):
                 original_text = thefile.read()
             
             #process
-            new_text = self.process_text_method(original_text, *self.args)
+            (error, new_text) = self.process_text_method(original_text, *self.args)
             
             #write
             with open(zim_file, 'w') as thefile:
                 thefile.write(new_text)
 
             #Update time
-            relativepath = os.path.relpath(zim_file, start=self.zim_root)
-            with self.lock:
-                self.timechecker.set_time(relativepath)
+            #In case of error, we don't set the current time.
+            #Maybe the user missed something, and the script should not
+            #skip the file next time to try again.
+            if not error:
+                relativepath = os.path.relpath(zim_file, start=self.zim_root)
+                with self.lock:
+                    self.timechecker.set_time(relativepath)
 
             #Done
             self.zim_file_queue.task_done()
