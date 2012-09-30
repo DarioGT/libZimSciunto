@@ -1,5 +1,5 @@
 Zimnotes
-=====
+========
 
 
 .. automodule:: zimnotes
