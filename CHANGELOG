@@ -1,4 +1,4 @@
-Version 0.?
+Version 0.2 - 09-30-2012
 * process_text_method should return a tuple with an error flag
 * Documentation
 
