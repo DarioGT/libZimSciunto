@@ -1,6 +1,8 @@
 How to release
 ==============
 
-* Update the file info.py
 * Update CHANGELOG
+* Update version in doc/conf.py
+* Update the file info.py
+* Build and push the doc
 * Create a tarball
