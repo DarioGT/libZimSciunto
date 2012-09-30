@@ -22,7 +22,13 @@ import re
 import os
 
 def protect(s):
-    """Protect Metacaracters in a string"""
+    """
+    Protect Metacaracters in a string
+    (add a \\ before)
+
+    :param s: string
+    :returns: protected string
+    """
     s = re.sub('\&', '\\\&', s)
     s = re.sub('\[', '\\\[', s)
     s = re.sub('\]', '\\\]', s)
@@ -46,6 +52,11 @@ def get_unexpanded_path(path):
     return path
 
 def create_pidfile(filename):
+    """
+    Create a pidfile
+
+    :param filename: name of the pid file
+    """
     filename = os.path.expanduser(filename)
     if os.access(filename, os.F_OK):
             #Oh oh, there is a lock file
@@ -65,6 +76,11 @@ def create_pidfile(filename):
         pidfile.write("%s" % os.getpid())
 
 def release_pidfile(filename):
+    """
+    Release the pidfile
+
+    :param filename: name of the pid file
+    """
     os.remove(os.path.expanduser(filename))
     
 
