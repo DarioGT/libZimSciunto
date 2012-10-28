@@ -35,11 +35,11 @@ class TimeChecker():
     
         :param filename: filename
         """
-        database = shelve.open(self.timedb)
-        try:
-            database[filename] = time.time()
-        finally:
-            database.close()
+        with closing(shelve.open(self.timedb)) as database:
+            try:
+                database[filename] = time.time()
+            finally:
+                database.close()
     
     
     def get_file_modif_status(self, filename):
@@ -53,14 +53,14 @@ class TimeChecker():
     
         :param filename: filename
         """
-        database = shelve.open(self.timedb)
-        try:
-            previous_time = database[filename]
-        except KeyError:
-            #We don't know...
-            return True
-        finally:
-            database.close()
+        with closing(shelve.open(self.timedb)) as database:
+            try:
+                previous_time = database[filename]
+            except KeyError:
+                #We don't know...
+                return True
+            finally:
+                database.close()
     
         if os.path.getmtime(os.path.join(self.zimroot, filename)) < previous_time:
             return False
