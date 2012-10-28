@@ -15,6 +15,7 @@
 
 
 import shelve
+from contextlib import closing
 import os
 import time
 
