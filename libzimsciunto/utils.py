@@ -14,7 +14,7 @@
 #along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-""" 
+"""
 A couple of useful functions...
 """
 
@@ -41,7 +41,7 @@ def get_unexpanded_path(path):
     if start by /home/foo,
     convert /home/foo by ~ in a path
 
-    >>> get_unexpanded_path('/home/gnu/dir') 
+    >>> get_unexpanded_path('/home/gnu/dir')
     '~/dir'
     >>> get_unexpanded_path('/tmp/foo')
     '/tmp/foo'
@@ -59,19 +59,19 @@ def create_pidfile(filename):
     """
     filename = os.path.expanduser(filename)
     if os.access(filename, os.F_OK):
-            #Oh oh, there is a lock file
-            with open(filename, "r") as pidfile:
-                pidfile.seek(0)
-                old_pd = pidfile.readline()
-            #PID is running?
-            if os.path.exists("/proc/%s" % old_pd):
-                    #Yes
-                    print('An instance is already running, exiting')
-                    sys.exit(1)
-            else:
-                    #No
-                    os.remove(filename)
-    
+        #Oh oh, there is a lock file
+        with open(filename, "r") as pidfile:
+            pidfile.seek(0)
+            old_pd = pidfile.readline()
+        #PID is running?
+        if os.path.exists("/proc/%s" % old_pd):
+            #Yes
+            print('An instance is already running, exiting')
+            sys.exit(1)
+        else:
+            #No
+            os.remove(filename)
+
     with open(filename, "w") as pidfile:
         pidfile.write("%s" % os.getpid())
 
@@ -82,11 +82,11 @@ def release_pidfile(filename):
     :param filename: name of the pid file
     """
     os.remove(os.path.expanduser(filename))
-    
+
 
 def _test():
     import doctest
     doctest.testmod()
-    
+
 if __name__ == '__main__':
     _test()

@@ -18,15 +18,8 @@ Functions dealing with zim notebooks
 """
 
 import logging
-import re
 import os
-import shutil
 import glob
-
-
-
-#our libs
-from libzimsciunto import utils
 
 def get_zim_files(zim_root):
     """
