@@ -21,6 +21,10 @@ A couple of useful functions...
 import re
 import os
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 def protect(s):
     """
     Protect Metacaracters in a string
@@ -66,7 +70,7 @@ def create_pidfile(filename):
         #PID is running?
         if os.path.exists("/proc/%s" % old_pd):
             #Yes
-            print('An instance is already running, exiting')
+            logger.warning('An instance is already running, exiting')
             sys.exit(1)
         else:
             #No
