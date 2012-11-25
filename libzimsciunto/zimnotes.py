@@ -35,9 +35,9 @@ def get_zim_files(zim_root):
         #Do not inspect .Archive
         if '.Archive' in dirnames:
             dirnames.remove(".Archive")
-        logger.debug('look in ' + str(root))
+        logger.debug('look in %s', root)
         for filename in glob.glob(os.path.join(root, '*.txt')):
-            logger.debug('file ' + filename)
+            logger.debug('file %s', filename)
             
             zim_files.append(filename)
     if zim_files == []:
@@ -90,7 +90,7 @@ class ThreadZimfiles(threading.Thread):
         """
         while True:
             zim_file = self.zim_file_queue.get()
-            print(zim_file)
+            logger.debug('Process %s', zim_file)
             #read
             with open(zim_file, 'r') as thefile:
                 original_text = thefile.read()
