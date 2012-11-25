@@ -17,9 +17,10 @@
 Functions dealing with zim notebooks
 """
 
-import logging
 import os
 import glob
+import logging
+logger = logging.getLogger(__name__)
 
 def get_zim_files(zim_root):
     """
@@ -28,21 +29,21 @@ def get_zim_files(zim_root):
     :param zim_root: filepath of the zim root directory
     :returns: list
     """
-    logging.info('Looking for zim files in ' + str(zim_root))
+    logger.info('Looking for zim files in ' + str(zim_root))
     zim_files = []
     for root, dirnames, filenames in os.walk(zim_root):
         #Do not inspect .Archive
         if '.Archive' in dirnames:
             dirnames.remove(".Archive")
-        logging.debug('look in ' + str(root))
+        logger.debug('look in ' + str(root))
         for filename in glob.glob(os.path.join(root, '*.txt')):
-            logging.debug('file ' + filename)
+            logger.debug('file ' + filename)
             
             zim_files.append(filename)
     if zim_files == []:
-        logging.warning('No zim file found!')
-    logging.debug('List of zim files')
-    logging.debug(zim_files)
+        logger.warning('No zim file found!')
+    logger.debug('List of zim files')
+    logger.debug(zim_files)
     return zim_files
 
 
