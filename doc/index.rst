@@ -24,6 +24,14 @@ Contents:
     utils
     timechecker
 
+
+
+How to install
+==============
+
+See :doc:`install`.
+
+
 ==================
 
 * :ref:`genindex`
