@@ -13,5 +13,5 @@ http://sciunto.github.com/libZimSciunto/
 Download
 ========
 
-http://sciunto.org/source/
+http://source.sciunto.org/libzimsciunto/
 
